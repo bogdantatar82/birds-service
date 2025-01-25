@@ -1,0 +1,310 @@
+{
+  "info": {
+    "_postman_id": "6b9f36dd-02c8-4f78-a30f-3ecd78f879e6",
+    "name": "birds-service",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "2513374"
+  },
+  "item": [
+    {
+      "name": "save bird",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"name\": \"awsome bird\",\n    \"color\": \"blue\",\n    \"weight\": 8,\n    \"height\": 1\n}\n",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8888/rest/v0/birds",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8888",
+          "path": [
+            "rest",
+            "v0",
+            "birds"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "get all bird",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "default"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8888/rest/v0/birds",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8888",
+          "path": [
+            "rest",
+            "v0",
+            "birds"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "get bird by id",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "default"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8888/rest/v0/birds/3c78bf5a-7556-436e-b954-0b61aab28191",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8888",
+          "path": [
+            "rest",
+            "v0",
+            "birds",
+            "3c78bf5a-7556-436e-b954-0b61aab28191"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "get bird by name and color",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "default"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8888/rest/v0/birds/search?name=great bird&color=green",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8888",
+          "path": [
+            "rest",
+            "v0",
+            "birds",
+            "search"
+          ],
+          "query": [
+            {
+              "key": "name",
+              "value": "great bird"
+            },
+            {
+              "key": "color",
+              "value": "green"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "save sighting",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n\t\"location\": \"Greece\",\n\t\"dateTime\": \"2025-01-25T19:37:26.425877\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8888/rest/v0/birds/b3aafa03-ee3e-43b0-b9cf-b696d0a25c8c/sightings",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8888",
+          "path": [
+            "rest",
+            "v0",
+            "birds",
+            "b3aafa03-ee3e-43b0-b9cf-b696d0a25c8c",
+            "sightings"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "get sighting by id",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "default"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8888/rest/v0/birds/3c78bf5a-7556-436e-b954-0b61aab28191/sightings/e5aac305-01fe-4a12-a8c0-2c5f0ebd9b02",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8888",
+          "path": [
+            "rest",
+            "v0",
+            "birds",
+            "3c78bf5a-7556-436e-b954-0b61aab28191",
+            "sightings",
+            "e5aac305-01fe-4a12-a8c0-2c5f0ebd9b02"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "get all sighting for bird",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "default"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8888/rest/v0/birds/3c78bf5a-7556-436e-b954-0b61aab28191/sightings",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8888",
+          "path": [
+            "rest",
+            "v0",
+            "birds",
+            "3c78bf5a-7556-436e-b954-0b61aab28191",
+            "sightings"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "get all sighting for all birds",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "default"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8888/rest/v0/birds/sightings/all",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8888",
+          "path": [
+            "rest",
+            "v0",
+            "birds",
+            "sightings",
+            "all"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "search sightnigs",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "default"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8888/rest/v0/birds/sightings/search?birdId=",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8888",
+          "path": [
+            "rest",
+            "v0",
+            "birds",
+            "sightings",
+            "search"
+          ],
+          "query": [
+            {
+              "key": "birdId",
+              "value": ""
+            }
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}

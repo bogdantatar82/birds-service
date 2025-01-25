@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.7.12</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
+    <groupId>com.hunus</groupId>
+    <artifactId>birds-service</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>birds-service</name>
+    <description>birds-service</description>
+
+    <properties>
+        <java.version>11</java.version>
+        <docker.registry>hunus</docker.registry>
+        <revision>local</revision>
+
+        <!-- dependency versions -->
+        <dockerfile.maven.plugin.version>0.45.1</dockerfile.maven.plugin.version>
+        <exec-maven-plugin.version>3.5.0</exec-maven-plugin.version>
+        <org.flywaydb.version>10.17.3</org.flywaydb.version>
+        <postgresql.version>42.6.0</postgresql.version>
+        <lombok.version>1.18.30</lombok.version>
+        <springdoc-openapi-ui.version>1.8.0</springdoc-openapi-ui.version>
+
+        <!-- test dependencies versions -->
+        <testcontainers.version>1.20.4</testcontainers.version>
+        <wiremock.version>2.27.2</wiremock.version>
+        <rest-assured.version>4.5.1</rest-assured.version>
+
+        <!-- database connectivity-->
+        <db.url>jdbc:postgresql://localhost:5432/birdsservicedb</db.url>
+        <db.username>birdsservice</db.username>
+        <db.password>birdsservice</db.password>
+    </properties>
+    <dependencies>
+        <!-- Enable Rest API -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-hateoas</artifactId>
+        </dependency>
+
+        <!-- Java Persistence -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>${lombok.version}</version>
+            <optional>true</optional>
+        </dependency>
+        <!-- Swagger generation -->
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-ui</artifactId>
+            <version>${springdoc-openapi-ui.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>${postgresql.version}</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-core</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>testcontainers</artifactId>
+            <version>${testcontainers.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>${testcontainers.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.github.tomakehurst</groupId>
+            <artifactId>wiremock</artifactId>
+            <version>${wiremock.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.rest-assured</groupId>
+            <artifactId>rest-assured</artifactId>
+            <version>${rest-assured.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.jayway.jsonpath</groupId>
+            <artifactId>json-path-assert</artifactId>
+            <version>2.9.0</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <finalName>${project.artifactId}</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven-compiler-plugin.version}</version>
+            </plugin>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>io.fabric8</groupId>
+                <artifactId>docker-maven-plugin</artifactId>
+                <version>${dockerfile.maven.plugin.version}</version>
+                <configuration>
+                    <verbose>true</verbose>
+                    <images>
+                        <image>
+                            <alias>${project.artifactId}</alias>
+                            <name>${docker.registry}/${project.artifactId}</name>
+                            <registry>${docker.registry}</registry>
+                            <build>
+                                <args>
+                                    <JAR_FILE>target/${project.artifactId}.jar</JAR_FILE>
+                                </args>
+                                <buildx>
+                                    <platforms>
+                                        <platform>linux/amd64</platform>
+                                    </platforms>
+                                </buildx>
+                                <contextDir>${basedir}</contextDir>
+                                <dockerFile>${basedir}/Dockerfile</dockerFile>
+                                <tags>
+                                    <tag>${revision}</tag>
+                                </tags>
+                            </build>
+                            <run>
+                                <!-- Never run the app service docker image here. Only run it from component tests -->
+                                <!-- This is needed to keep default docker build config here & not interfere with -->
+                                <!-- local-db profile image of postgres which can be run separately from here. -->
+                                <skip>true</skip>
+                            </run>
+                        </image>
+                    </images>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>docker-build</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>build</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>docker-push</id>
+                        <goals>
+                            <goal>push</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>

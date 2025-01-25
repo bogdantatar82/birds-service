@@ -1,0 +1,22 @@
+services:
+  birds-service:
+    image: hunus/birds-service:latest
+    environment:
+      - SPRING_PROFILES_ACTIVE=default
+      - JAVA_OPTS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:8787 -Xmx512m -Xms512m
+    ports:
+      - "8888:8888"
+      - "8787:8787"
+    depends_on:
+      - postgres
+    container_name: "birds-service"
+
+  postgres:
+    image: postgres:14.10
+    environment:
+      - POSTGRES_DB=birdsservicedb
+      - POSTGRES_USER=birdsservice
+      - POSTGRES_PASSWORD=birdsservice
+    ports:
+      - "5432:5432"
+    container_name: "birds-service-database"
